@@ -1,19 +1,15 @@
 #include <stdio.h>
-//#include "bstree.h"
+#include "bstree.h"
 //#include "hashtab.h"
 #include <stdlib.h>
 
-int main(int a, char *argv[])
+int main()
 {
-	FILE *A;
-	int n = atoi(argv[1]);
-	char word[n];
+	bstree *tree;
 
-	A = fopen("dsa-spring2016-task2-src/war_and_peace.txt.utf8", "r");
-	for (int i = 0; i < n; i++) {
-		fscanf(A, "%c", &word[i]);
-	}
-	fclose(A);
+	tree = bstree_create(180, "tigr");
+
+	printf("%d %s", tree->key, tree->value);
 
 	return 0;
 }
