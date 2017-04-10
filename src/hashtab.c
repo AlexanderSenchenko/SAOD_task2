@@ -11,9 +11,15 @@ unsigned int hashtab_hash(char *value)
 	return key % 100;
 }
 
-void hashtab_init(struct listnode **hashtab)
+void hashtab_init(listnode **hashtab)
 {
+	*hashtab = malloc(100 * sizeof(listnode));
+
 	for (int i = 0; i < 100; i++) {
-		hashtab[i] = NULL;
+		(*hashtab)[i] = NULL;
 	}
 }
+
+//void hashtab_add(listnode **hashtab, char *key, int value)
+//listnode *hashtab_lookup(listnode **hashtab, char *key)
+//void hashtab_delete(struct listnode **hashtab, char *key)
