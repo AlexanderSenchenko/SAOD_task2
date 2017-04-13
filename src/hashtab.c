@@ -1,25 +1,38 @@
 #include "hashtab.h"
 
-unsigned int hashtab_hash(char *value)
+unsigned int hashtab_hash(char *key)
 {
-	unsigned int key = 0;
+	unsigned int value = 0;
 
-	for (int i = 0; value[i] != '\0'; i++) {
-		key = key + value[i];		
+	for (int i = 0; key[i] != '\0'; i++) {
+		value += key[i];		
 	}
 
-	return key % 100;
+	return value % 100;
 }
 
 void hashtab_init(listnode **hashtab)
 {
-	*hashtab = malloc(100 * sizeof(listnode));
-
 	for (int i = 0; i < 100; i++) {
-		(*hashtab)[i] = NULL;
+		hashtab[i] = NULL;
 	}
 }
 
-//void hashtab_add(listnode **hashtab, char *key, int value)
+void hashtab_add(listnode **hashtab, char *key, int value)
+{
+	listnode *node;
+
+	unsigned int index = value; //hashtab_hash(key);
+
+	node = malloc(sizeof(*node));
+
+	if (node != NULL) {
+		node->value = value;
+		node->key = key;
+		node->next = hashtab[index];
+		hashtab[index] = node;
+	}
+}
+
 //listnode *hashtab_lookup(listnode **hashtab, char *key)
 //void hashtab_delete(struct listnode **hashtab, char *key)

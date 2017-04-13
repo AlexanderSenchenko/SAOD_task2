@@ -4,22 +4,22 @@
 int main(int argc, char *argv[])
 {
 	FILE *in = fopen("word.txt", "r");
-	char word[20];
-	listnode *hashtab = NULL;
-	unsigned int key;
+	char key[20];
+	listnode *hashtab[100];
+	unsigned int value;
 
-	hashtab_init(&hashtab);
-	/*for (int i = 0; i < 2; i++) {
+	hashtab_init(hashtab);
+	/*for (int i = 0; i < 100; i++) {
 		hashtab[i] = NULL;
 	}*/
 
 	for (int i = 1; i <= atoi(argv[1]); i++) {
-		fgets(word, sizeof(word), in);
-		key = hashtab_hash(word);
-		//hashtab_add();
+		fgets(key, sizeof(key), in);
+		value = hashtab_hash(key);
+		hashtab_add(hashtab, key, value);
 		
-		printf("%d", key);
-		printf("%s", word);
+		printf("%d", hashtab[44]->value);
+		printf("%s", hashtab[44]->key);
 	}
 
 	fclose(in);
