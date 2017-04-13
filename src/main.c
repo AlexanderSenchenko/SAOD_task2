@@ -6,21 +6,23 @@ int main(int argc, char *argv[])
 	FILE *in = fopen("word.txt", "r");
 	char key[20];
 	listnode *hashtab[100];
-	unsigned int value;
+	listnode *node;
+	unsigned int value = 0;
 
 	hashtab_init(hashtab);
-	/*for (int i = 0; i < 100; i++) {
-		hashtab[i] = NULL;
-	}*/
 
 	for (int i = 1; i <= atoi(argv[1]); i++) {
 		fgets(key, sizeof(key), in);
 		value = hashtab_hash(key);
+		printf("%d %s", value, key);
 		hashtab_add(hashtab, key, value);
-		
-		printf("%d", hashtab[44]->value);
-		printf("%s", hashtab[44]->key);
 	}
+
+	node = hashtab_lookup(hashtab, argv[2]);
+	printf("Поиск: %d %s", node->value, node->key);
+
+	hashtab_delete(hashtab, argv[3]);
+	printf("Delete: %d %s\n", node->value, node->key);
 
 	fclose(in);
 

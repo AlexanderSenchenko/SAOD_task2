@@ -4,7 +4,7 @@ unsigned int hashtab_hash(char *key)
 {
 	unsigned int value = 0;
 
-	for (int i = 0; key[i] != '\0'; i++) {
+	for (int i = 0; key[i] != '\n'; i++) {
 		value += key[i];		
 	}
 
@@ -22,7 +22,7 @@ void hashtab_add(listnode **hashtab, char *key, int value)
 {
 	listnode *node;
 
-	unsigned int index = value; //hashtab_hash(key);
+	int index = value;//hashtab_hash(key);
 
 	node = malloc(sizeof(*node));
 
@@ -34,5 +34,38 @@ void hashtab_add(listnode **hashtab, char *key, int value)
 	}
 }
 
-//listnode *hashtab_lookup(listnode **hashtab, char *key)
-//void hashtab_delete(struct listnode **hashtab, char *key)
+listnode *hashtab_lookup(listnode **hashtab, char *key)
+{
+	int index;
+	listnode *node;
+
+	index = hashtab_hash(key);
+
+	for (node = hashtab[index]; node != NULL; node = node->next) {
+		if (strcmp(node->key, key) == 0) {
+			return node;
+		}
+	}
+	return NULL;
+}
+
+void hashtab_delete(struct listnode **hashtab, char *key)
+{
+	int index;
+	listnode *p, *prev = NULL;
+
+	index = hashtab_hash(key);
+
+	for (p = hashtab[index]; p != NULL; p = p->next) {
+		if (strcmp(p->key, key) == 0) {
+			if (prev == NULL) {
+				hashtab[index] = p->next;
+			} else {
+				prev->next = p->next;
+			}
+			free(p);
+			return;
+		}
+		prev = p;
+	}
+}
