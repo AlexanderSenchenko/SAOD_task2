@@ -4,7 +4,10 @@ unsigned int hashtab_hash(char *key)
 {
 	unsigned int value = 0;
 
-	for (int i = 0; key[i] != '\n'; i++) {
+	for (int i = 0; key[i] != '\0'; i++) {
+		if (key[i] == '\n') {
+			continue;
+		}	
 		value += key[i];		
 	}
 
@@ -22,7 +25,7 @@ void hashtab_add(listnode **hashtab, char *key, int value)
 {
 	listnode *node;
 
-	int index = value;//hashtab_hash(key);
+	int index = hashtab_hash(key);
 
 	node = malloc(sizeof(*node));
 

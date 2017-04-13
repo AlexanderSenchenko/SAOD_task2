@@ -1,7 +1,6 @@
 #include "bstree.h"
-#include <stdlib.h>
 
-bstree *bstree_create(int key, char *value)
+bstree *bstree_create(int value, char *key)
 {
 	bstree *node;
 
