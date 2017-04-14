@@ -5,4 +5,4 @@ all:
 
 gdb:
 	gcc -Wall -g -O0 -o gdbtest src/main.c src/hashtab.c
-
+	gdb --args ./gdbtest 20000 сунутся abandonne
