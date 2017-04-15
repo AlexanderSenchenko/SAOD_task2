@@ -16,5 +16,6 @@ void hashtab_init(listnode **hashtab);
 void hashtab_add(listnode **hashtab, char *key, int value);
 listnode *hashtab_lookup(listnode **hashtab, char *key);
 void hashtab_delete(listnode **hashtab, char *key);
+//unsigned xor_hash(void *key, int len);
 
 #endif

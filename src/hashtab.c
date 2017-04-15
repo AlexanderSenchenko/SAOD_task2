@@ -6,7 +6,6 @@ unsigned int hashtab_hash(char *key)
 
 	for (int i = 0; key[i] != '\0'; i++) {
 		if (key[i] == '\n') {
-			key[i] = '\0';
 			continue;
 		}	
 		value += key[i];		
@@ -73,3 +72,17 @@ void hashtab_delete(struct listnode **hashtab, char *key)
 		prev = p;
 	}
 }
+
+/*unsigned xor_hash(void *key, int len)
+{
+	unsigned char *p = key;
+	unsigned h = 0;
+	int i;
+
+	for (i = 0; i < len; i++)
+	{
+		h ^= p[i];
+	}
+
+	return h;
+}*/

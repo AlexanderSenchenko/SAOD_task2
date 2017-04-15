@@ -26,16 +26,17 @@ int main(int argc, char *argv[])
 		value = hashtab_hash(key);
 		//printf("%d %s\n", value, key);
 		hashtab_add(hashtab, key, value);
-		key = NULL;
 	}
 
 	t = wtime();
-	node = hashtab_lookup(hashtab, argv[2]);
+	node = hashtab_lookup(hashtab, key);
 	t = wtime() - t;
-	printf("Поиск t: %.10f sec.\n", t);
-	printf("Поиск результат: %d %s\n", node->value, node->key);
+	printf("Время поиска: %.10f sec.\n", t);
+	printf("Результат поиска: %d %s\n", node->value, node->key);
 
-	hashtab_delete(hashtab, argv[3]);
+	
+
+	hashtab_delete(hashtab, key);
 
 	fclose(in);
 
