@@ -1,11 +1,14 @@
 #include "hashtab.h"
 
+extern int count;
+
 unsigned int hashtab_hash(char *key)
 {
 	unsigned int value = 0;
 
 	for (int i = 0; key[i] != '\0'; i++) {
 		if (key[i] == '\n') {
+			key[i] = '\0';
 			continue;
 		}	
 		value += key[i];		
@@ -48,6 +51,7 @@ listnode *hashtab_lookup(listnode **hashtab, char *key)
 		if (strcmp(node->key, key) == 0) {
 			return node;
 		}
+		count++;
 	}
 	return NULL;
 }
