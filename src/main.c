@@ -16,52 +16,73 @@ int main(int argc, char *argv[])
 {
 	srand(time(0));
 	FILE *in = fopen("word.txt", "r");
-	char *key = NULL;
+	//FILE *out = fopen("Lead_time.txt", "a");
+
+	int rand_value, n = atoi(argv[1]);
+	char *rand_key, *word[n];
 	size_t len = 0;
-	unsigned int value, value_bs;
+	unsigned int value;
 	double t;
+
 	listnode *hashtab[100], *node;
-	bstree *tree;
+	bstree *tree, *node_bs;
 
 	hashtab_init(hashtab);
 
-	for (int i = 0; i < atoi(argv[1]); i++) {
-		getline(&key, &len, in);
-		value = hashtab_hash(key);
-		hashtab_add(hashtab, key, value);		
+	rand_value = rand() % n;
+
+	for (int i = 0; i < n; i++) {
+		word[i] = malloc(sizeof(char) * 20);
+		word[i] = NULL;
+		getline(&word[i], &len, in);
+		//printf("%s", word[i]);
+		//Hashtab
+		value = hashtab_hash(word[i]);
+
+		if (rand_value == i) {
+			rand_key = word[i];
+		}
+
+		hashtab_add(hashtab, word[i], value);
+
+		//Bstree
 		if (i == 0) {
-			tree = bstree_create(key, i);
-			key = NULL;
+			tree = bstree_create(word[i]);
 			continue;
 		}
-		value_bs = rand() % atoi(argv[1]);
-		bstree_add(tree, key, value_bs);
-		key = NULL;
+		bstree_add(tree, word[i]);
 	}
 
+	//Эксперимент 1
+	//Bstree
 	t = wtime();
-	node = hashtab_lookup(hashtab, argv[2]);
+	node_bs = bstree_lookup(tree, rand_key);
 	t = wtime() - t;
-	printf("Время поиска: %.10f sec.\n", t);
+	//fprintf(out, "%d\t%.10f\t", n, t);
+	printf("Bstree:\nВремя поиска: %.10f sec.\n", t);
+	printf("Результат поиска: %s\n", node_bs->key);
+
+	//Hashtab
+	t = wtime();
+	node = hashtab_lookup(hashtab, rand_key);
+	t = wtime() - t;
+	//fprintf(out, "%.10f\t", t);
+	printf("Hashtab:\nВремя поиска: %.10f sec.\n", t);
 	printf("Результат поиска: %d %s\n", node->value, node->key);
 
-	/*FILE *out = fopen("Lead_time.txt", "a");
-	//эксперимент 1
-	fprintf(out, "%d\t%.10f\t", atoi(argv[1]), t); //bstree
-	fprintf(out, "%.10f\t", t); //hashtab
-	//эксперимент 4
-	fprintf(out, "%.10f\t", t); //худш
-	fprintf(out, "%.10f\t", t); //ср
-	//эксперимент 6
-	fprintf(out, "%.10f\t", t);//KP
-	fprintf(out, "%.10f\t", t);
-	fprintf(out, "%.10f\t", t);//XOR
-	fprintf(out, "%.10f\n", t);
-	fclose(out);*/
+	//Эксперимент 4
+	//fprintf(out, "%.10f\t", t); //худш
+	//fprintf(out, "%.10f\t", t); //ср
+	//Эксперимент 6
+	//fprintf(out, "%.10f\t", t);//KP
+	//fprintf(out, "%.10f\t", t);
+	//fprintf(out, "%.10f\t", t);//XOR
+	//fprintf(out, "%.10f\n", t);
+	//fclose(out);
 
-	hashtab_delete(hashtab, argv[3]);
+	hashtab_delete(hashtab, rand_key);
 
-	printf("%d\n", count);
+	printf("Колизии: %d\n", count);
 
 	fclose(in);
 
