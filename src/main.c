@@ -1,5 +1,4 @@
 #include "hashtab.h"
-#include "bstree.h"
 #include <sys/time.h>
 #include <time.h>
 
@@ -25,7 +24,6 @@ int main(int argc, char *argv[])
 	double t;
 
 	listnode *hashtab[100], *node;
-	bstree *tree, *node_bs;
 
 	hashtab_init(hashtab);
 
@@ -44,24 +42,9 @@ int main(int argc, char *argv[])
 		}
 
 		hashtab_add(hashtab, word[i], value);
-
-		//Bstree
-		if (i == 0) {
-			tree = bstree_create(word[i]);
-			continue;
-		}
-		bstree_add(tree, word[i]);
 	}
 
 	//Эксперимент 1
-	//Bstree
-	t = wtime();
-	node_bs = bstree_lookup(tree, rand_key);
-	t = wtime() - t;
-	//fprintf(out, "%d\t%.10f\t", n, t);
-	printf("Bstree:\nВремя поиска: %.10f sec.\n", t);
-	printf("Результат поиска: %s\n", node_bs->key);
-
 	//Hashtab
 	t = wtime();
 	node = hashtab_lookup(hashtab, rand_key);

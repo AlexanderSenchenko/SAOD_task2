@@ -1,69 +1,66 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "bstree.h"
+#include <sys/time.h>
 #include <time.h>
+
+double wtime()
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (double)t.tv_sec + (double)t.tv_usec * 1E-6;
+}
 
 int main(int argc, char *argv[])
 {
-	srand(time(NULL));
-	int size = atoi(argv[1]);
-	char *Name = argv[2];
-	FILE *d;	
-	d = fopen("word.txt", "r");
-	if (d == NULL) {
-		return 0;
-	}
-	FILE *a;
-	a = fopen("Results.txt", "a");
-	if (a == NULL) {
-		return 0;
-	}
+	srand(time(0));
+	FILE *in = fopen("word.txt", "r");
+	//FILE *out = fopen("Lead_time.txt", "a");
 
-	bstree *tree;
-	int ptr, ptr1; 
-	
-	ptr = strcmp("look", Name);
-	ptr1 = strcmp("min", Name);
+	int rand_value, n = atoi(argv[1]);
+	char *rand_key, *word[n];
+	size_t len = 0;
+	double t;
 
-	int random = rand() % size;
-	char word[100];
-	clock_t time;
-	for (int i = 0; i < size; i++) {
-		char *temp = malloc(sizeof(char)*100);
-        	fscanf(d, "%s\n", temp);
+	bstree *tree, *node_bs;
 
+	rand_value = rand() % n;
+
+	for (int i = 0; i < n; i++) {
+		word[i] = malloc(sizeof(char) * 20);
+		word[i] = NULL;
+		getline(&word[i], &len, in);
+
+		if (rand_value == i) {
+			rand_key = word[i];
+		}
+
+		//Bstree
 		if (i == 0) {
-			tree =bstree_create(temp, i);
+			tree = bstree_create(word[i]);
+			continue;
 		}
-		else {
-			bstree_add(tree, temp, i);
-		}
-		if (i == random) {
-			strcpy(word, temp);
-		}
-		//memset(word, 0, 100);
-	}
-	bstree *test;
-	if (ptr == 0) {
-		printf("Word which we find: %s %d\n", word, random);
-		printf("Lookup:\n");
-		time = clock();
-		test = bstree_lookup(tree, word);
-		time = clock() - time;
-		printf("Word: %s\n", test->key);
-		fprintf(a, "Size: %d Lookup: %.10f\n", size, (double)time/CLOCKS_PER_SEC);
-	}
-	if (ptr1 == 0) {
-		printf("Min:\n");
-		time = clock();
-		test = bstree_min(tree);
-		time = clock() - time;
-		printf("Word: %s\n", test->key);
-		fprintf(a, "Size: %d Min: %.10f\n", size, (double)time/CLOCKS_PER_SEC);
+		bstree_add(tree, word[i]);
 	}
 
-	printf("Time: %.10f\n", (double)time/CLOCKS_PER_SEC);
-	fclose(a);
-	fclose(d);
+	//Эксперимент 1
+	//Bstree
+	t = wtime();
+	node_bs = bstree_lookup(tree, rand_key);
+	t = wtime() - t;
+	//fprintf(out, "%d\t%.10f\t", n, t);
+	printf("Bstree:\nВремя поиска: %.10f sec.\n", t);
+	printf("Результат поиска: %s\n", node_bs->key);
+
+	//Эксперимент 4
+	//fprintf(out, "%.10f\t", t); //худш
+	//fprintf(out, "%.10f\t", t); //ср
+	//Эксперимент 6
+	//fprintf(out, "%.10f\t", t);//KP
+	//fprintf(out, "%.10f\t", t);
+	//fprintf(out, "%.10f\t", t);//XOR
+	//fprintf(out, "%.10f\n", t);
+	//fclose(out);
+
+	fclose(in);
+
 	return 0;
 }
