@@ -5,7 +5,7 @@ double wtime()
 {
     struct timeval t;
     gettimeofday(&t, NULL);
-    return (double)t.tv_sec + (double)t.tv_usec * 1E-10;
+    return (double)t.tv_sec + (double)t.tv_usec * 1E-6;
 }
 
 int main(int argc, char *argv[])
