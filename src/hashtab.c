@@ -1,11 +1,14 @@
 #include "hashtab.h"
 
+extern int count;
+
 unsigned int hashtab_hash(char *key)
 {
 	unsigned int value = 0;
 
 	for (int i = 0; key[i] != '\0'; i++) {
 		if (key[i] == '\n') {
+			key[i] = '\0';
 			continue;
 		}	
 		value += key[i];		
@@ -26,12 +29,13 @@ void hashtab_add(listnode **hashtab, char *key, int value)
 	listnode *node;
 
 	int index = hashtab_hash(key);
-
+	char *test = malloc(sizeof(char) * 20);
+	strcpy(test, key);
 	node = malloc(sizeof(*node));
 
 	if (node != NULL) {
 		node->value = value;
-		node->key = key;
+		node->key = test;
 		node->next = hashtab[index];
 		hashtab[index] = node;
 	}
@@ -48,6 +52,7 @@ listnode *hashtab_lookup(listnode **hashtab, char *key)
 		if (strcmp(node->key, key) == 0) {
 			return node;
 		}
+	count++;
 	}
 	return NULL;
 }
